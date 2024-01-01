@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from applications.models import db
 from email_validator import validate_email, EmailNotValidError
-from email_validator import validate_email, EmailNotValidError
+
 
 @app.get('/')
 def home():
@@ -18,19 +18,6 @@ def home():
 def admin():
     return "Admin Dashboard"
 
-
-
-@app.get('/activate/inst/<int:inst_id>')
-@auth_required("token")
-@roles_required("admin")
-def activate_instructor(inst_id):
-    instructor = User.query.get(inst_id)
-    if not instructor or "seller" not in instructor.roles:
-        return jsonify({"message": "Instructor not found"}), 404
-
-    instructor.active = True
-    db.session.commit()
-    return jsonify({"message": "User Activated"})
 
 @app.post('/user-login')
 def user_login():

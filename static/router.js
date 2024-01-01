@@ -1,15 +1,16 @@
 import Index from './homePage.js'
-import LoggedHome from './Components/loghome.js'
 import Dash from './Components/dash.js'
 import About from './Components/about.js'
 import Login from './Components/login.js'
 import Register from './Components/register.js'
+import loghome from './Components/loghome.js'
+
 
 const routes = [
     { path: '/', component: Index, name: 'Ind' },
-    { path: '/home', component: LoggedHome, name: 'Home' },
-    { path: '/dash', component: Dash, name: 'Dash' },
-    { path: '/about', component: About },
+    { path: '/home', component: loghome, name: 'Home' },
+    { path: '/dashboard', component: Dash, name: 'Dash'},
+    { path: '/about', component: About, name: 'About' },
     { path: '/login', component: Login, name: 'Login' },
     { path: '/register', component: Register, name: 'Register' },
   ]

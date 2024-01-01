@@ -1,6 +1,8 @@
+
 export default {
     props : ['data'],
-    template: `<div>Hello from Main Component {{ data }}
+    template: `
+    <div>Hello from Main Component {{ data }}
         <p>
             <router-link to="/about">Go to About</router-link>
             |
@@ -11,6 +13,10 @@ export default {
         <div>
             <router-view></router-view>
         </div>
-        
-    </div>`
+    </div>`,
+    data() {
+        return {
+            token: localStorage.getItem('auth-token'),
+        }
+    },
 }

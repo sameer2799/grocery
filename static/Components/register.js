@@ -108,7 +108,7 @@ export default {
     },
     methods: {
         async register(){
-            console.log(this.cred.role)
+            // console.log(this.cred.role)
             if (this.cred.email && this.cred.password && this.cred.username && this.cred.role){
                 
                 const res = await fetch('/user-register',{
@@ -118,7 +118,7 @@ export default {
                     },
                     body: JSON.stringify(this.cred),
                 })
-                const data = await res.json();
+                const data = await res.json().catch(err => this.error = err);
     
                 if (res.ok) {
                     if (data.info) {this.info = data.info}

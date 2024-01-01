@@ -41,8 +41,9 @@ class Categories(db.Model):
 
     category_id = db.Column(db.Integer, primary_key = True)
     category_name = db.Column(db.String, nullable = False)
-    # sellers = db.relationship('User', backref = 'has_categories')
+    description = db.Column(db.String, nullable=False)
     is_approved = db.Column(db.Boolean(), default = False)
+    products = db.relationship('Products', backref = 'category', lazy = True)    
 
 class Products(db.Model):
     __tablename__ = 'products'
@@ -55,6 +56,9 @@ class Products(db.Model):
     expiry_date = db.Column(db.Date, nullable = False)
     description = db.Column(db.Text, nullable = False)
     product_category_id = db.Column(db.Integer, db.ForeignKey("categories.category_id"))
+    is_featured = db.Column(db.Boolean, default=False)
+    is_available = db.Column(db.Boolean, default=True)
+    
 
 # class Customer_cart(db.Model):
 #     __tablename__ = 'customer_cart'    
@@ -70,3 +74,17 @@ class Products(db.Model):
 #     order_category_id = db.Column(db.Integer, nullable = False)
 #     order_product_id = db.Column(db.Integer, nullable = False)
 #     total_amount = db.Column(db.Double, nullable = False)
+    # order_date = db.Column(db.DateTime, nullable=False)
+    # is_completed = db.Column(db.Boolean, default=False)
+    # shipping_address = db.Column(db.String(255), nullable=False)
+    # payment_method = db.Column(db.String(50), nullable=False)
+# Card
+# Net Banking
+# PayPal
+# UPI
+# Bank Transfer
+# Cash on Delivery (COD)
+# Cryptocurrency (e.g., Bitcoin, Ethereum)
+# Mobile Wallets (e.g., Samsung Pay, Alipay)
+# Gift Card
+

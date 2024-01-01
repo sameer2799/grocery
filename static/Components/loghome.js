@@ -4,9 +4,10 @@ export default {
     props : ['data'],
     template: `
     <div>
-        <nav-bar></nav-bar>
+        
         Welcome to Home Page, {{ userRole }}
-        <button type="submit" class="btn btn-outline-info" @click="goDashboard">Go to Dashboard</button>
+        <button v-if="userRole==='buyer'" type="submit" class="btn btn-outline-info" @click="goDashboard">Go to Cart</button>
+        <button v-else type="submit" class="btn btn-outline-info" @click="goDashboard">Go to Dashboard</button>
     </div>`,
     data() {
         return {

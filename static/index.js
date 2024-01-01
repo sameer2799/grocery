@@ -1,7 +1,6 @@
 import MainComponent from './Components/mainComp.js'
-import router from './router.js'
-import SideBar from './Components/sideBar.js'
 import NavBar from './Components/navBar.js'
+import router from './router.js'
 
 const { createApp } = Vue
 
@@ -16,9 +15,8 @@ router.beforeEach((to, from, next) => {
 const app = createApp({
   template: `
   <div>Hello from vue template index.js
-    
+    <nav-bar></nav-bar>
     <main-component></main-component>
-    <side-bar></side-bar>
   </div>
   `,
   data() {
@@ -27,9 +25,8 @@ const app = createApp({
     }
   },
   components: {
-    NavBar,
     MainComponent,
-    SideBar
+    NavBar
   }
 })
   

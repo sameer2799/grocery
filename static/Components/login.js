@@ -48,14 +48,14 @@ export default {
                     },
                     body: JSON.stringify(this.cred),
                 })
-                const data = await res.json();
+                const data = await res.json().catch(err => this.error = err);
     
                 if (res.ok) {    
                     if (data.token) {
                         localStorage.setItem('auth-token', data.token)
                         localStorage.setItem('role', data.role)
                     }
-                    this.$router.push({path: '/home'})
+                    this.$router.push({name: 'Home'})
                 }
                 else {
                     this.info = data.info;
