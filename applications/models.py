@@ -57,8 +57,30 @@ class Products(db.Model):
     description = db.Column(db.Text, nullable = False)
     product_category_id = db.Column(db.Integer, db.ForeignKey("categories.category_id"))
     is_featured = db.Column(db.Boolean, default=False)
-    is_available = db.Column(db.Boolean, default=True)
+    seller_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     
+# is_available = db.Column(db.Boolean, default=False)
+# from enum import Enum
+
+# class Season(Enum):
+#     OFF_SEASON = 1
+#     PEAK_SEASON = 2
+
+# class Product(db.Model):
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String(50), nullable=False)
+#     base_price = db.Column(db.Float, nullable=False)
+#     season = db.Column(db.Enum(Season), default=Season.OFF_SEASON)
+
+#     def get_price(self):
+#         if self.season == Season.PEAK_SEASON:
+#             return (self.base_price * 1.1)
+#         else:
+#             return self.base_price
+
+# change the value of season in order endpoint
+
+
 
 # class Customer_cart(db.Model):
 #     __tablename__ = 'customer_cart'    
@@ -88,3 +110,35 @@ class Products(db.Model):
 # Mobile Wallets (e.g., Samsung Pay, Alipay)
 # Gift Card
 
+# for DYNAMIC PRICING
+
+# from datetime import datetime
+
+# # Define your date range
+# start_date = datetime(2022, 1, 1)
+# end_date = datetime(2022, 12, 31)
+
+# # Define the date you want to check
+# date_to_check = datetime(2022, 6, 15)
+
+# # Check if the date is within the range
+# if start_date <= date_to_check <= end_date:
+#     print("Date is within range")
+# else:
+#     print("Date is not within range")
+#----------------------------------------
+# from datetime import datetime
+
+# # Define the datetime object you want to compare
+# date_to_check = datetime(2022, 6, 15)
+
+# # Get the current date and time
+# now = datetime.now()
+
+# # Compare the datetime object with the current date
+# if date_to_check.date() == now.date():
+#     print("The date is today")
+# elif date_to_check.date() < now.date():
+#     print("The date is in the past")
+# else:
+#     print("The date is in the future")

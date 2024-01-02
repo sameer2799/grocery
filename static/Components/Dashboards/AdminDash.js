@@ -1,10 +1,10 @@
-import UserList from "../UserList.js"
-import NavBar from "../navBar.js"
+import UserList from "./UserList.js"
+
 
 export default {
     props : ['data'],
-    template: `<div>
-        
+    template: `
+    <div>
         Welcome to Dashboard, {{ userRole }}
         <button type="submit" class="btn btn-outline-info" @click="goHome">Go to Home</button>
         <user-list></user-list>
@@ -20,7 +20,6 @@ export default {
         }
     },
     components: {
-        UserList,
-        NavBar
+        UserList
     }
 }

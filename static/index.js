@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
 
 const app = createApp({
   template: `
-  <div>Hello from vue template index.js
+  <div>
     <nav-bar></nav-bar>
     <main-component></main-component>
   </div>

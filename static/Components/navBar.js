@@ -20,14 +20,14 @@ export default {
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><router-link to="/about" class="dropdown-item">About</router-link></li>
               <li><hr class="dropdown-divider"></li>
               <li v-if="isLoggedIn"><span class="dropdown-item" @click="logout">Logout</span></li>
-                <li v-else><span class="dropdown-item" @click="login">Login</span></li>
+              <li v-else><span class="dropdown-item" @click="login">Login</span></li>
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+            <router-link to="/register" class="nav-link" tabindex="-1">Register Now!</router-link>
           </li>
         </ul>
         <form class="d-flex">
