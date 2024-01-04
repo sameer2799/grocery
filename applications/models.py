@@ -45,11 +45,18 @@ class Categories(db.Model):
     is_approved = db.Column(db.Boolean(), default = False)
     products = db.relationship('Products', backref = 'category', lazy = True)    
 
+from enum import Enum
+
+class Season(Enum):
+    OFF_SEASON = 1
+    PEAK_SEASON = 2
+
+
 class Products(db.Model):
     __tablename__ = 'products'
 
     product_id = db.Column(db.Integer, primary_key = True)
-    product_name = db.Column(db.String(length = 30), unique=True, nullable = False)
+    product_name = db.Column(db.String(length = 30), nullable = False)
     units = db.Column(db.String, nullable = False)
     price_per_unit = db.Column(db.Double, nullable = False)
     stock = db.Column(db.Integer, nullable = False)
@@ -57,30 +64,17 @@ class Products(db.Model):
     description = db.Column(db.Text, nullable = False)
     product_category_id = db.Column(db.Integer, db.ForeignKey("categories.category_id"))
     is_featured = db.Column(db.Boolean, default=False)
+    is_available = db.Column(db.Boolean, default=False)
     seller_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    
-# is_available = db.Column(db.Boolean, default=False)
-# from enum import Enum
+    season = db.Column(db.Enum(Season), default=Season.OFF_SEASON)
 
-# class Season(Enum):
-#     OFF_SEASON = 1
-#     PEAK_SEASON = 2
-
-# class Product(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(50), nullable=False)
-#     base_price = db.Column(db.Float, nullable=False)
-#     season = db.Column(db.Enum(Season), default=Season.OFF_SEASON)
-
-#     def get_price(self):
-#         if self.season == Season.PEAK_SEASON:
-#             return (self.base_price * 1.1)
-#         else:
-#             return self.base_price
+    def get_price(self):
+        if self.season == Season.PEAK_SEASON:
+            return (self.price_per_unit * 1.1)
+        else:
+            return self.price_per_unit
 
 # change the value of season in order endpoint
-
-
 
 # class Customer_cart(db.Model):
 #     __tablename__ = 'customer_cart'    

@@ -3,9 +3,6 @@ export default {
     props : ['data'],
     template: `
     <div>
-        <p>
-            
-        </p>
         <div>
             <router-view></router-view>
         </div>

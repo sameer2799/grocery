@@ -22,7 +22,13 @@ export default {
                     {{ this.error }}
                 </div>
                 <div class="mb-3 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-outline-primary" @click="login">Login</button>
+                    <button type="button" class="btn btn-outline-primary" @click="login">Login</button>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <div>Don't have an account?</div>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <router-link to="Register"><button type="button" class="btn btn-outline-success">Register Here!</button></router-link>
                 </div>
             </form>
         </div>

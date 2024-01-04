@@ -1,5 +1,5 @@
 export default {
     props : ['data'],
     template: `
-    <div></div>`
+    <div>Hello from Ind component</div>`
 }

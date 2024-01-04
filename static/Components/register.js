@@ -47,7 +47,13 @@ export default {
                         {{ this.error }}
                     </div>
                     <div class="col-12 mb-3 d-flex justify-content-center">
-                        <button type="submit" @click="register" class="btn btn-outline-primary">Register</button>
+                        <button type="button" @click="register" class="btn btn-outline-primary">Register</button>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-center">
+                        <span>Already have an account?</span>
+                    </div>
+                    <div class="mb-3 d-flex justify-content-center">
+                        <router-link to="Login"><button type="button" class="btn btn-outline-success">Login Here!</button></router-link>
                     </div>
                 </form>
         </div>
@@ -66,7 +72,7 @@ export default {
                     <label for="user-password" class="form-label">Password</label>
                     <input type="password" class="form-control" autocomplete="new-password" id="user-password" v-model="cred.password" required>
                 </div>
-                <label for="roleForm" class="form-label">Who are you</label>
+                <label class="form-label">Who are you</label>
                 <div class="ms-5 mb-2" id="roleForm">
                     <div class="form-check">
                         <input class="form-check-input" type="radio" id="flexRadioDefault1" value="seller" v-model="cred.role">
@@ -81,14 +87,20 @@ export default {
                         </label>
                     </div>
                 </div>
-                <div class="mb-3 text-primary">
+                <div class="mb-3 text-warning">
                     {{ this.info }}
                 </div>
                 <div class="mb-3 text-danger">
                     {{ this.error }}
                 </div>
                 <div class="mb-3 d-flex justify-content-center">
-                    <button type="submit" class="btn btn-outline-primary" @click="register">Register</button>
+                    <button type="button" class="btn btn-outline-primary" @click="register">Register</button>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <div>Already have an account?</div>
+                </div>
+                <div class="mb-3 d-flex justify-content-center">
+                    <router-link to="Login"><button type="button" class="btn btn-outline-success">Login Here!</button></router-link>
                 </div>
             </form>
         </div> 
@@ -131,7 +143,12 @@ export default {
             else{
                 this.error = 'Please enter valid credentials'
             }
-            
+            if (this.info || this.error) {
+                setTimeout(() => {
+                    this.error = null
+                    this.info = null
+                }, 7000)
+            }
         }
     },
 }

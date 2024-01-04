@@ -28,7 +28,7 @@ export default {
             </div>
         </div>
     </div>
-        <div class="container">
+        
             <div v-if="this.error" class="d-flex justify-content-center">{{ this.error }}</div>
             <div v-else>
                 <div class="container m-3 d-flex flex-wrap">
@@ -42,7 +42,6 @@ export default {
                             <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#add_cat_modal">Add Category</button>
                         </div>
                         <div v-else>
-                            <h3 class="fw-bold">Categories Available</h3>
                             <ul class="list-group list-group-numbered">
                                 <li class="list-group-item" v-for="category in this.categories">{{ category.category_name }}</li>
                                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#add_cat_modal">Request a new Category</button>
@@ -51,7 +50,7 @@ export default {
                     </div>
                 </div>
             </div>
-        </div>
+        
     </div>`,
     data() {
         return {
@@ -105,7 +104,7 @@ export default {
         
         const data = await response.json().catch((err) => {this.error = err});
         if (response.ok) {
-            this.categories = data.filter(category => category.is_approved === true)
+            this.categories = data
             // console.log(this.categories)
         } else {
             this.cat_error = data.info;
