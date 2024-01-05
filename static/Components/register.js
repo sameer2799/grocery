@@ -40,7 +40,7 @@ export default {
                             </div>
                         </div>
                     </fieldset>
-                    <div class="mb-3 text-warning">
+                    <div class="mb-3 text-success">
                         {{ this.info }}
                     </div>
                     <div class="mb-3 text-danger">

@@ -44,7 +44,7 @@ export default {
                             </div>
                             <div class="card-footer text-end">
                                 <button @click="publishProduct(item.product_id)" type="button" class="btn btn-outline-primary m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Publish Product</button>
-                                <a href="#" class="btn btn-outline-warning m-2">Edit product</a>
+                                
                                 <button @click="deleteProduct(item.product_id)" type="button" class="btn btn-outline-danger m-2" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete product</button>
                           </div>
                         </div>
@@ -93,6 +93,12 @@ export default {
                 } else {
                     this.success = null
                     this.error = data.message
+                    if (this.error || this.success) {
+                        setTimeout(() => {
+                            this.error = null;
+                            this.success = null;
+                        }, 10000)
+                    }
                 }
             } catch (err) {
                 console.log(err)
@@ -118,31 +124,15 @@ export default {
                     this.success = null
                     this.error = data.message
                 }
+                if (this.error || this.success) {
+                    setTimeout(() => {
+                        this.error = null;
+                        this.success = null;
+                    }, 10000)
+                }
             } catch (err) {
                 console.log(err)
             }
         },
-        // async editProduct(id) {
-        //     try {
-        //         const res = await fetch('/api/product', {
-        //             method: 'PUT',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 'Authentication-Token': this.token
-        //             },
-        //             body: JSON.stringify(this.editProd)
-        //         })
-        //         const data = await res.json()
-        //         if (res.ok) {
-        //             this.error = null
-        //             this.success = data.info
-        //         } else {
-        //             this.success = null
-        //             this.error = data.message
-        //         }
-        //     } catch (err) {
-        //         console.log(err)
-        //     }
-        // }
     },
 }

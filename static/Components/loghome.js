@@ -1,4 +1,5 @@
 import NavBar from './navBar.js'
+import Customer from './Dashboards/customer.js'
 
 export default {
     props : ['data'],
@@ -8,6 +9,7 @@ export default {
         Welcome to Home Page, {{ userRole }}
         <div v-if="userRole==='buyer'" class="container">
             <button type="submit" class="btn btn-outline-info" @click="goDashboard">Go to Cart</button>
+            <customer></customer>
         </div>
         <div v-else class="d-flex m-5 p-3">
             <button type="submit" class="btn btn-outline-info" @click="goDashboard">Go to Dashboard</button>
@@ -25,6 +27,7 @@ export default {
         }
     },
     components: {
-        NavBar
+        NavBar,
+        Customer
     },
 }

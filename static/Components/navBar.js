@@ -24,7 +24,7 @@ export default {
               <router-link to="Login" class="nav-link text-success" tabindex="-1">Login</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/about" class="nav-link text-success" tabindex="-1">About</router-link>
+              <router-link to="/about" class="nav-link me-2 text-success" tabindex="-1">About</router-link>
             </li>
         </ul>
         <form class="d-flex">
@@ -39,9 +39,6 @@ export default {
         role: localStorage.getItem('role'),
         isLoggedIn: localStorage.getItem('auth-token')? true : false,
     }
-  },
-  computed: {
-    
   },
   methods: {
     logout(){

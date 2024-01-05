@@ -307,7 +307,7 @@ class Product(Resource):
             return {"message": "No data provided"}, 400
         
 
-#--------------------------------------------- Remember to Add Publish endpoint in controllers.py, do checks also espeacially for product category id -----------------------------
+
 api.add_resource(Product, '/product')
 
 
