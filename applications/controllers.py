@@ -1,10 +1,10 @@
 from flask import current_app as app
 from flask import  jsonify, request, render_template
-from flask_security import auth_required, roles_required
+from flask_security import auth_required, roles_required, current_user
 from applications.security import datastore
 from werkzeug.security import check_password_hash, generate_password_hash
-
-from applications.models import db
+from datetime import datetime
+from applications.models import *
 from email_validator import validate_email, EmailNotValidError
 
 
@@ -83,3 +83,38 @@ def register():
 
     return jsonify({"message": "User registered successfully"})
 
+
+#--------------------------------------------------------
+#-----------------------Add to Cart----------------------
+#--------------------------------------------------------
+
+@app.post('/add-to-cart')
+@auth_required("token")
+@roles_required("buyer")
+def add_to_cart():
+    data = request.get_json()
+
+    for p in data:
+        product_id, quantity = p.get('product_id'), p.get('quantity')
+
+        product = Products.query.filter_by(product_id=product_id).first()
+        if not product:
+            return jsonify({"message": "Product not found"}), 404
+
+        if not product.is_available:
+            return jsonify({"message": "Product not available"}), 400
+
+        if product.expiry_date < datetime.now().date():
+            return jsonify({"message": "Product expired"}), 400
+
+        cart = Cart.query.filter_by(customer=current_user.id, carted_products=product_id).first()
+        if cart:
+            cart.quantity += quantity
+            db.session.commit()
+            continue
+
+        cart = Cart(customer=current_user.id, carted_products=product_id, quantity=quantity)
+        db.session.add(cart)
+        db.session.commit()
+
+    return jsonify({"info": "Products added to cart successfully"})

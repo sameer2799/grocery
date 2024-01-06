@@ -362,3 +362,46 @@ class UserList(Resource):
         return marshal(users, user_fields), 200
 
 api.add_resource(UserList, '/user-list')
+
+
+
+#--------------------------------------------------------
+#-----------------------Add to Cart----------------------
+#--------------------------------------------------------
+
+add_to_cart_parser = reqparse.RequestParser()
+add_to_cart_parser.add_argument('product_id', type=int, help='Id of Product')
+
+cart_fields = {
+    'cart_id': fields.Integer,
+    'customer': fields.Integer,
+    'carted_products': fields.Integer,
+    'quantity': fields.Integer,
+}
+
+class CartList(Resource):
+    @auth_required("token")
+    @roles_required("buyer")
+    def get(self):
+        cart = Cart.query.filter_by(customer = current_user.id).all()
+        if not cart:
+            return {"message": "Cart is empty"}, 404
+        
+        return marshal(cart, cart_fields), 200
+
+    @auth_required("token")
+    @roles_required("buyer")
+    def delete(self):
+        args = add_to_cart_parser.parse_args()
+        id = args['product_id']
+        if not id:
+            return {"message": "Product id is required"}, 400
+        product = Cart.query.filter_by(customer = current_user.id, carted_products = id).first()
+        if (not product) or (product.customer != current_user.id):
+            return {"message": "Product not found"}, 404
+
+        db.session.query(Cart).filter_by(carted_products = id).delete(synchronize_session="fetch")
+        db.session.commit()
+        return {"info": "Product deleted"}
+
+api.add_resource(CartList, '/cart')

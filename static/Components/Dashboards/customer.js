@@ -47,44 +47,32 @@ export default {
             token: localStorage.getItem('auth-token'),
             dummy_products: [],
             cart: [],
-            error: null
+            error: null,
+            info: null
         }
     },
     methods: {
         addToCart(id, quant) {
-            this.cart.push({ product_id: id, quantity: quant });
-            
+            this.cart.push({ product_id : id, quantity : quant});
         },
         async saveToCart() {
-            const aggregatedQuantity = this.cart.reduce((accumulator, current) => {
-                const existingProduct = accumulator.find(item => item.product_id === current.product_id);
-                if (existingProduct) {
-                    existingProduct.quantity += current.quantity;
-                } else {
-                    accumulator.push({ product_id: current.product_id, quantity: current.quantity });
-                }
-                return accumulator;
-            }, []);
-            this.cart = aggregatedQuantity;
 
-            const res = await fetch('/api/cart', {
+            const res = await fetch('/add-to-cart', {
                 method : 'POST',
                 headers: {
                         'Authentication-Token': this.token,
                         'Content-Type': 'application/json'
                     },
-                body: JSON.stringify({
-                    products: this.cart
-                })
+                body: JSON.stringify(this.cart)
                 });
             const data = await res.json();
             if (res.ok) {
-                this.cart.push(data);
+                this.info = data.info;
             }
             else {
                 this.error = data.message;
             }
-        },
+        },        
     },
     async mounted() {
         const res = await fetch('/api/product', {
@@ -107,7 +95,9 @@ export default {
         }
     },
     async unmounted() {
-        this.saveToCart();
+        if (this.cart.length !== 0){
+            this.saveToCart();
+        }
     },
     
 }

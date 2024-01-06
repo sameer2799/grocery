@@ -76,24 +76,25 @@ class Products(db.Model):
 
 # change the value of season in order endpoint
 
-# class Customer_cart(db.Model):
-#     __tablename__ = 'customer_cart'    
+class Cart(db.Model):
+    __tablename__ = 'cart'    
     
-#     cust = db.Column(db.Integer, db.ForeignKey("customer.id"),primary_key = True)
-#     carted_products = db.Column(db.Integer, db.ForeignKey("products.product_id"), primary_key = True)
-#     quantity = db.Column(db.Integer, default = 1, nullable = False)
+    customer = db.Column(db.Integer, db.ForeignKey("user.id"), primary_key = True)
+    carted_products = db.Column(db.Integer, db.ForeignKey("products.product_id"), primary_key = True)
+    quantity = db.Column(db.Integer, default = 1, nullable = False)
 
-# class Order(db.Model):
-#     __tablename__ = "order"
-#     order_id = db.Column(db.Integer, primary_key = True)
-#     order_customer_id = db.Column(db.Integer, nullable = False)
-#     order_category_id = db.Column(db.Integer, nullable = False)
-#     order_product_id = db.Column(db.Integer, nullable = False)
-#     total_amount = db.Column(db.Double, nullable = False)
-    # order_date = db.Column(db.DateTime, nullable=False)
-    # is_completed = db.Column(db.Boolean, default=False)
-    # shipping_address = db.Column(db.String(255), nullable=False)
-    # payment_method = db.Column(db.String(50), nullable=False)
+class Order(db.Model):
+    __tablename__ = "order"
+
+    order_id = db.Column(db.Integer, primary_key = True)
+    order_customer_id = db.Column(db.Integer, nullable = False)
+    order_category_id = db.Column(db.Integer, nullable = False)
+    order_product_id = db.Column(db.Integer, nullable = False)
+    total_amount = db.Column(db.Double, nullable = False)
+    order_date = db.Column(db.DateTime, nullable=False)
+    is_completed = db.Column(db.Boolean, default=False)
+    shipping_address = db.Column(db.String(255), nullable=False)
+    payment_method = db.Column(db.String(50), nullable=False)
 # Card
 # Net Banking
 # PayPal
