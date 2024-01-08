@@ -8,11 +8,30 @@ export default {
             <h5 class="modal-title" id="staticBackdropLabel">Search Results</h5>
           </div>
           <div class="modal-body">
-            <div v-if="searchRresults">
-              {{ this.searchRresults + "searchRresults" }}
-            </div>
-            <div v-else>
-              {{ this.searchError }}
+            <div v-if="this.searchRresults">
+              <div v-if="this.searchRresults.categories.length !==0">
+                Categories:
+                <ol>
+                  <li v-for="category in this.searchRresults.categories">
+                    <div class="d-flex justify-content-between">
+                      {{ category.category_name }}<br>Description: {{ category.description }}
+                    </div>
+                  </li>
+                </ol>
+              </div>
+              <div v-else-if="this.searchRresults.products !==0">
+                Products:
+                <ol>
+                  <li v-for="product in this.searchRresults.products">
+                    <div class="d-flex justify-content-between">
+                      {{ product.product_name }}<br>Description: {{ product.description }}<br>Price: {{ product.price_per_unit }}<br>Expiry Date: {{ product.expiry_date }}
+                    </div>
+                  </li>
+                </ol>
+              </div>
+              <div v-else>
+                {{ this.searchError }}
+              </div>
             </div>
           </div>
           <div class="modal-footer">
@@ -51,10 +70,10 @@ export default {
               <router-link to="/about" class="nav-link me-2 text-success" tabindex="-1">About</router-link>
             </li>
         </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" id="search" type="search" placeholder="for eg: bananas" aria-label="Search" v-model="searchKey">
-          <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#searchModal" @click="search()">Search</button>
-        </form>
+        <div class="d-flex">
+          <input class="form-control me-2" id="search" type="search" placeholder="for eg: bananas" aria-label="Search" v-model="this.searchKey">
+          <button class="btn btn-outline-success" type="button" data-bs-toggle="modal" data-bs-target="#searchModal" @click="this.search()">Search</button>
+        </div>
       </div>
     </div>
   </nav>`,
@@ -62,15 +81,25 @@ export default {
     return {
         role: localStorage.getItem('role'),
         isLoggedIn: localStorage.getItem('auth-token')? true : false,
-        searchRresults: "",
+        searchRresults: null,
         searchKey: null,
         searchError: "",
     }
   },
   methods: {
-    search(){
+    async search(){
       if (this.searchKey){
         console.log(this.searchKey)
+        const res = await fetch(`/api/search/${this.searchKey}` , {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => res.json())
+        .then(data => {
+          console.log(data)
+          this.searchRresults = data
+        })
       }
       else{
         this.searchError = "Please enter a search key";

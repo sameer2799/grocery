@@ -474,6 +474,46 @@ class OrderList(Resource):
 
 api.add_resource(OrderList, '/order')
 
+#--------------------------------------------------------
+#-----------------------Search---------------------------
+#--------------------------------------------------------
+
+p_search_fields = {
+    'product_name': fields.String,
+    'price_per_unit': fields.Float,
+    'expiry_date': fields.String,
+    'description': fields.String,
+}
+c_search_fields = {
+    'category_name': fields.String,
+    'description': fields.String,
+}
+
+class Search(Resource):
+    
+    def get(self, searchKey):
+        if not searchKey:
+            return {"message": "Search key is required"}, 400
+        
+        categories = Categories.query.filter(Categories.category_name.ilike(f"%{searchKey}%")).all()
+        categories.extend(Categories.query.filter(Categories.description.ilike(f"%{searchKey}%")).all())
+        products = Products.query.filter(Products.product_name.ilike(f"%{searchKey}%")).all()
+        products.extend(Products.query.filter(Products.description.ilike(f"%{searchKey}%")).all())
+        products.extend(Products.query.filter(Products.price_per_unit.ilike(f"%{searchKey}%")).all())
+        products.extend(Products.query.filter(Products.expiry_date.ilike(f"%{searchKey}%")).all())
+        
+        if not products and not categories:
+            return {"message": "No products found"}, 404
+        
+        response = {
+            'categories': marshal(categories, c_search_fields),
+            'products': marshal(products, p_search_fields),
+        }
+
+        return response, 200
+
+
+api.add_resource(Search, '/search/<string:searchKey>')
 
 # for DYNAMIC PRICING
 

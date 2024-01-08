@@ -5,6 +5,7 @@ from applications.security import datastore
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from applications.models import *
+from sqlalchemy import or_
 from email_validator import validate_email, EmailNotValidError
 
 
