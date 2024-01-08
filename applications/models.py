@@ -90,50 +90,9 @@ class Order(db.Model):
     order_customer_id = db.Column(db.Integer, nullable = False)
     order_category_id = db.Column(db.Integer, nullable = False)
     order_product_id = db.Column(db.Integer, nullable = False)
+    order_quantity = db.Column(db.Integer, nullable=False)
     total_amount = db.Column(db.Double, nullable = False)
     order_date = db.Column(db.DateTime, nullable=False)
-    is_completed = db.Column(db.Boolean, default=False)
     shipping_address = db.Column(db.String(255), nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)
-# Card
-# Net Banking
-# PayPal
-# UPI
-# Bank Transfer
-# Cash on Delivery (COD)
-# Cryptocurrency (e.g., Bitcoin, Ethereum)
-# Mobile Wallets (e.g., Samsung Pay, Alipay)
-# Gift Card
-
-# for DYNAMIC PRICING
-
-# from datetime import datetime
-
-# # Define your date range
-# start_date = datetime(2022, 1, 1)
-# end_date = datetime(2022, 12, 31)
-
-# # Define the date you want to check
-# date_to_check = datetime(2022, 6, 15)
-
-# # Check if the date is within the range
-# if start_date <= date_to_check <= end_date:
-#     print("Date is within range")
-# else:
-#     print("Date is not within range")
-#----------------------------------------
-# from datetime import datetime
-
-# # Define the datetime object you want to compare
-# date_to_check = datetime(2022, 6, 15)
-
-# # Get the current date and time
-# now = datetime.now()
-
-# # Compare the datetime object with the current date
-# if date_to_check.date() == now.date():
-#     print("The date is today")
-# elif date_to_check.date() < now.date():
-#     print("The date is in the past")
-# else:
-#     print("The date is in the future")
+    

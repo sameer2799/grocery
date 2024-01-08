@@ -1,7 +1,17 @@
 export default {
     props : ['data'],
     template: `
-    <div>
+    <div class="row">
+        <div class="col-12">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-4">Welcome to the Farmer's Market!</h1>
+                    <p class="lead">We provide the best quality products at the best prices!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-5">
             <div class="container p-5 bg-light">
                 <form class="p-3">
                 <h3 class="text-center mb-3">Register</h3>                 
@@ -57,53 +67,6 @@ export default {
                     </div>
                 </form>
         </div>
-        <div class='d-flex justify-content-center'>
-            <form class="p-5 bg-light">
-                <h3 class="text-center mb-5">Register</h3>
-                <div class="mb-3">
-                    <label for="user-username" class="form-label">Username</label>
-                    <input type="text" class="form-control" autocomplete="new-password" id="user-username" placeholder="Foo Bar" aria-describedby="emailHelp" required v-model="cred.username">
-                </div>
-                <div class="mb-3">
-                    <label for="user-email" class="form-label">Email address</label>
-                    <input type="email" class="form-control" autocomplete="new-password" id="user-email" placeholder="abc@example.com" aria-describedby="emailHelp" required v-model="cred.email">
-                </div>
-                <div class="mb-3">
-                    <label for="user-password" class="form-label">Password</label>
-                    <input type="password" class="form-control" autocomplete="new-password" id="user-password" v-model="cred.password" required>
-                </div>
-                <label class="form-label">Who are you</label>
-                <div class="ms-5 mb-2" id="roleForm">
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" id="flexRadioDefault1" value="seller" v-model="cred.role">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Seller
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" id="flexRadioDefault2" checked value="buyer" v-model="cred.role">
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            Customer
-                        </label>
-                    </div>
-                </div>
-                <div class="mb-3 text-warning">
-                    {{ this.info }}
-                </div>
-                <div class="mb-3 text-danger">
-                    {{ this.error }}
-                </div>
-                <div class="mb-3 d-flex justify-content-center">
-                    <button type="button" class="btn btn-outline-primary" @click="register">Register</button>
-                </div>
-                <div class="mb-3 d-flex justify-content-center">
-                    <div>Already have an account?</div>
-                </div>
-                <div class="mb-3 d-flex justify-content-center">
-                    <router-link to="Login"><button type="button" class="btn btn-outline-success">Login Here!</button></router-link>
-                </div>
-            </form>
-        </div> 
     </div>
     `,
     data() {

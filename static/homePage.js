@@ -1,5 +1,11 @@
+import UnloggedCustomer from './Components/uncustomer.js'
+
 export default {
     props : ['data'],
     template: `
-    <div>Hello from Ind component</div>`
+    <unlogged-customer></unlogged-customer>
+    `,
+    components: {
+        UnloggedCustomer
+    }
 }

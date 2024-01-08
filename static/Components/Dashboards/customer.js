@@ -18,15 +18,28 @@ export default {
                     <p class="card-text">{{ prod.description }}</p>
                     <p class="card-text">Expiry Date: {{ prod.expiry_date }}</p>
                     <p class="card-text">Select Quantity: </p>
-                    <form class="row g-2">
-                        <div class="col-auto">
-                            <label for="inputPassword2" class="visually-hidden">Quantity</label>
-                            <input type="number" class="form-control" id="inputPassword2" placeholder="0" v-model="prod.quantity">
-                        </div>
-                        <div class="col-auto">
-                            <button type="button" class="btn btn-outline-primary mb-3" @click="addToCart(prod.product_id,prod.quantity)">Add to Cart</button>
-                        </div>
-                    </form>
+                    <div v-if="prod.stock !== 0">
+                        <form class="row g-2">
+                            <div class="col-auto">
+                                <label for="inputPassword2" class="visually-hidden">Quantity</label>
+                                <input type="number" class="form-control" id="inputPassword2" placeholder="0" v-model="prod.quantity">
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-outline-primary mb-3" @click="addToCart(prod.product_id,prod.quantity)">Add to Cart</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div v-else>
+                        <form class="row g-2">
+                            <div class="col-auto">
+                                <label for="inputPassword2" class="visually-hidden">Quantity</label>
+                                <input type="number" class="form-control" id="inputPassword2" placeholder="0" disabled>
+                            </div>
+                            <div class="col-auto">
+                                <button type="button" class="btn btn-outline-secondary mb-3" disabled>Add to Cart</button>
+                            </div>
+                        </form>
+                    </div>
                     <div class="card-body m-0 p-0 text-end">
                         <p class="card-text text-muted">Seller: {{ prod.seller_id }}</p>
                     </div>

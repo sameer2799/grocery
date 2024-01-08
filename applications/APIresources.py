@@ -250,59 +250,43 @@ class Product(Resource):
         if (not product) or (product.seller_id != current_user.id):
             return {"message": "Product not found"}, 404
 
-        if args['product_name']:
+        if args['product_name'] or args['expiry_date'] or args['product_category_id'] or args['price_per_unit'] or args['stock'] or args['description'] or args['units']:
             prod = Products.query.get(id)
-            prod.product_name = args['product_name']
-            prod.is_available = False
-            db.session.commit()
-            return {"info": "Product updated"}
-    
-        if args['expiry_date']:
-            prod = Products.query.get(id)
-            args['expiry_date'] = datetime.strptime(args['expiry_date'], "%Y-%m-%d")
-            if args['expiry_date'] < datetime.now():
-                return {"message": "Expired product cannot be listed!"}, 400
-            prod.expiry_date = args['expiry_date']
+
+            if args['product_name']:
+                prod.product_name = args['product_name']
+            
+            if args['expiry_date']:
+                args['expiry_date'] = datetime.strptime(args['expiry_date'], "%Y-%m-%d")
+                if args['expiry_date'] < datetime.now():
+                    return {"message": "Expired product cannot be listed!"}, 400
+                prod.expiry_date = args['expiry_date']
+            
+            if args['product_category_id']:
+                category = Categories.query.get(args['product_category_id'])
+                if not category:
+                    return {"message": "Category not found"}, 404
+                if not category.is_approved:
+                    return {"message": "Category not approved yet"}, 400
+                
+                prod.product_category_id = args['product_category_id']
+                
+            if args['price_per_unit']:
+                prod.price_per_unit = args['price_per_unit']
+                
+            if args['stock']:
+                prod.stock = args['stock']
+                
+            if args['description']:
+                prod.description = args['description']
+                
+            if args['units']:
+                prod.units = args['units']
+            
             prod.is_available = False
             db.session.commit()
             return {"info": "Product updated"}
 
-        if args['product_category_id']:
-            category = Categories.query.get(args['product_category_id'])
-            if not category:
-                return {"message": "Category not found"}, 404
-            if not category.is_approved:
-                return {"message": "Category not approved yet"}, 400
-            prod = Products.query.get(id)
-            prod.category_id = args['product_category_id']
-            prod.is_available = False
-            db.session.commit()
-            return {"info": "Product updated"}
-        if args['price_per_unit']:
-            prod = Products.query.get(id)
-            prod.price_per_unit = args['price_per_unit']
-            prod.is_available = False
-            db.session.commit()
-            return {"info": "Product updated"}
-        if args['stock']:
-            prod = Products.query.get(id)
-            prod.stock = args['stock']
-            prod.is_available = False
-            db.session.commit()
-            return {"info": "Product updated"}
-        if args['description']:
-            prod = Products.query.get(id)
-            prod.description = args['description']
-            prod.is_available = False
-            db.session.commit()
-            return {"info": "Product updated"}
-        if args['units']:
-            prod = Products.query.get(id)
-            prod.units = args['units']
-            prod.is_available = False
-            db.session.commit()
-            return {"info": "Product updated"}
-        
         if not args:
             return {"message": "No data provided"}, 400
         
@@ -333,6 +317,21 @@ class PublishProduct(Resource):
         return {"info": "Product published"}
 
 api.add_resource(PublishProduct, '/publish/product')
+
+
+#--------------------------------------------------------
+#-----------------------Home Page------------------------
+#--------------------------------------------------------
+
+class HomePage(Resource):
+    def get(self):
+        products = Products.query.filter_by(is_available = True).all()
+        if not products:
+            return {"message": "No products found"}, 404
+        return marshal(products, product_format), 200
+
+api.add_resource(HomePage, '/unlog')
+
 
 #--------------------------------------------------------
 #-----------------------All Users------------------------
@@ -405,3 +404,106 @@ class CartList(Resource):
         return {"info": "Product deleted"}
 
 api.add_resource(CartList, '/cart')
+
+#--------------------------------------------------------
+#-----------------------Order----------------------------
+#--------------------------------------------------------
+
+order_parser = reqparse.RequestParser()
+order_parser.add_argument('total', type=str, help='Total Bill of Customer')
+order_parser.add_argument('address', type=str, help='Address of Customer')
+order_parser.add_argument('pay_method', type=str, help='Payment option of Customer')
+
+order_fields = {
+    'order_id': fields.Integer,
+    'order_customer_id': fields.Integer,
+    'order_category_id': fields.Integer,
+    'order_product_id': fields.Integer,
+    'order_quantity': fields.Integer,
+    'total_amount': fields.Integer,
+    'order_date': fields.String,
+    'shipping_address': fields.String,
+    'payment_method': fields.String,
+
+}
+
+class OrderList(Resource):
+    @auth_required("token")
+    @roles_required("buyer")
+    def post(self):
+        args = order_parser.parse_args()
+        total = args['total']
+        address = args['address']
+        pay_method = args['pay_method']
+
+        if  not total and not address and not pay_method:
+            return {"message": "All fields are required"}, 400
+
+        prods = Cart.query.filter_by(customer = current_user.id).all()
+        if not prods:
+            return {"message": "Cart is empty"}, 404
+        
+        for prod in prods:
+            product = Products.query.get(prod.carted_products)
+            if not product:
+                return {"message": f"{product.product_name} not found"}, 404
+            if product.stock < prod.quantity:
+                return {"message": f"{product.product_name} out of stock"}, 400
+
+            order = Order(order_customer_id = current_user.id, order_category_id = product.product_category_id, order_product_id = product.product_id, order_quantity = prod.quantity, total_amount = total, order_date = datetime.now(), shipping_address = address, payment_method = pay_method)
+            db.session.add(order)    
+            product.stock -= prod.quantity
+            db.session.commit()
+
+        db.session.query(Cart).filter_by(customer = current_user.id).delete(synchronize_session="fetch")
+        db.session.commit()
+        return {"info": "Order placed successfully. Thank you for shopping with us!"}, 200
+
+
+    @auth_required("token")
+    @roles_required("seller")
+    def get(self):
+
+        p = Products.query.filter_by(seller_id = current_user.id).all()
+                
+        order = Order.query.filter_by(order_product_id = p.product_id).all()
+        if not order:
+            return {"message": "No Order Found"}, 404
+        return marshal(order, order_fields), 200
+        
+
+api.add_resource(OrderList, '/order')
+
+
+# for DYNAMIC PRICING
+
+# from datetime import datetime
+
+# # Define your date range
+# start_date = datetime(2022, 1, 1)
+# end_date = datetime(2022, 12, 31)
+
+# # Define the date you want to check
+# date_to_check = datetime(2022, 6, 15)
+
+# # Check if the date is within the range
+# if start_date <= date_to_check <= end_date:
+#     print("Date is within range")
+# else:
+#     print("Date is not within range")
+#----------------------------------------
+# from datetime import datetime
+
+# # Define the datetime object you want to compare
+# date_to_check = datetime(2022, 6, 15)
+
+# # Get the current date and time
+# now = datetime.now()
+
+# # Compare the datetime object with the current date
+# if date_to_check.date() == now.date():
+#     print("The date is today")
+# elif date_to_check.date() < now.date():
+#     print("The date is in the past")
+# else:
+#     print("The date is in the future")

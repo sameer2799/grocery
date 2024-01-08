@@ -31,7 +31,7 @@ export default {
         
             <div v-if="this.error" class="d-flex justify-content-center">{{ this.error }}</div>
             <div v-else>
-                <div class="container m-3 d-flex flex-wrap">
+                <div class="container d-flex flex-wrap">
                     <div class="list-container ">
                         <div v-if="this.cat_error">
                             <span class="fst-italic">{{ this.cat_error }}</span><br><br>

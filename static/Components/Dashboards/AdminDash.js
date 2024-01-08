@@ -1,12 +1,19 @@
 import UserList from "./UserList.js"
 
-
 export default {
     props : ['data'],
     template: `
     <div>
-        Welcome to Dashboard, {{ userRole }}
-        <button type="submit" class="btn btn-outline-info" @click="goHome">Go to Home</button>
+    <div class="m-3 row">
+        <div class="col-12">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-4">Welcome Admin</h1>
+                    <p class="lead">Get your work done easily!</p>
+                </div>
+            </div>
+        </div>
+    </div>
         <user-list></user-list>
     </div>`,
     data() {

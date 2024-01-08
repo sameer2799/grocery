@@ -1,7 +1,17 @@
 export default {
     props : ['data'],
     template: `
-    <div>
+    <div class="row">
+        <div class="col-12">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-4">Welcome to the Farmer's Market!</h1>
+                    <p class="lead">We provide the best quality products at the best prices!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="m-5">
 
         <div class='d-flex justify-content-center'>
             <form class="p-5 bg-light">

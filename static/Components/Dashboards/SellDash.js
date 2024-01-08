@@ -23,9 +23,7 @@ export default {
             </div>
         </div>
 
-        Welcome to Dashboard, {{ userRole }}
-        <button type="submit" class="btn btn-outline-info" @click="goHome">Go to Home</button>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex mt-3 justify-content-end">
             <div class="accordion" id="accordionPanelsStayOpenExample">
                 <div class="accordion-item">
                 <h2 class="accordion-header" id="panelsStayOpen-headingOne">
@@ -87,7 +85,7 @@ export default {
         
         const data = await res.json().catch(err => console.log(err))
         if (res.ok) {
-            this.products = data
+            this.products = data;
         }
         else {
             this.error = data.message;
