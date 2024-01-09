@@ -7,7 +7,7 @@ from datetime import datetime
 from applications.models import *
 from sqlalchemy import or_
 from email_validator import validate_email, EmailNotValidError
-
+from .tasks import say_hello
 
 @app.get('/')
 def home():
@@ -119,3 +119,15 @@ def add_to_cart():
         db.session.commit()
 
     return jsonify({"info": "Products added to cart successfully"})
+
+
+#------------------------------------------------------------
+#----------------------- Celery -----------------------------
+#------------------------------------------------------------
+
+@app.get('/say-hello')
+def say_hello_view():
+    print("calling the celery task")
+    t = say_hello.apply_async()
+    print("called the celery task")
+    return jsonify({"task_id": t.id})
